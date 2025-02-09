@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RickAndMortyClient {
     private static final String BASE_URL = "https://rickandmortyapi.com/api/character?page=";
+    private static final int FIRST_PAGE = 1;
     private final ObjectMapper objectMapper;
 
     public List<CharacterDto> getAllCharacters() {
@@ -26,8 +27,8 @@ public class RickAndMortyClient {
     }
 
     private List<CharacterDto> readAllPages(HttpClient httpClient, List<CharacterDto> info) {
-        int page = 1;
-        int pages;
+        int page = FIRST_PAGE;
+        int pages = FIRST_PAGE;
         do {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .GET()
@@ -42,7 +43,7 @@ public class RickAndMortyClient {
                 pages = charactersResponseDto.info().pages();
                 page++;
             } catch (IOException | InterruptedException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error while retrieving data from the API", e);
             }
         } while (page <= pages);
 

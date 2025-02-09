@@ -24,6 +24,9 @@ public class CharacterServiceImpl implements CharacterService {
 
     @Override
     public Character getRandomCharacter() {
+        if (characters_size == 0) {
+            throw new RuntimeException("There is no character in db");
+        }
         Random random = new Random();
         int randomId = random.nextInt(characters_size);
         return characterRepository.findById((long) randomId)
